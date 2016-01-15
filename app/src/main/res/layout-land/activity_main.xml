@@ -1,0 +1,46 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/txtTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:padding="@dimen/padding_medium"
+        android:text="@string/txtFlyOut"
+        android:textColor="#000080"
+        android:textSize="20dp"
+        android:typeface="monospace"
+        tools:context=".MainActivity"
+        android:layout_marginTop="60dp" />
+
+    <EditText
+        android:id="@+id/txtIPAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/hintIP"
+        android:layout_below="@+id/txtTitle"
+        android:layout_alignLeft="@+id/txtTitle" />
+
+    <Button
+        android:id="@+id/btnConnect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtIPAddress"
+        android:layout_toRightOf="@+id/txtIPAddress"
+        android:text="@string/txtConnect" />
+
+    <ImageView
+        android:id="@+id/imgRobot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtIPAddress"
+        android:src="@drawable/icon_soultwine" />
+
+</RelativeLayout>

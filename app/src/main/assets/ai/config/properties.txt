@@ -1,0 +1,8 @@
+url:http://www.romainclaret.com
+name:Nao
+email:contact@rocla.ch
+gender:male
+botmaster:Romain Claret
+organization:Rocla Matrix
+version:0.0.1
+

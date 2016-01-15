@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Soul Keeper</string>
+    <string name="reset">Reset</string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+</resources>

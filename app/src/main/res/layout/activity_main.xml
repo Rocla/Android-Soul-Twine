@@ -1,0 +1,115 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#000"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/txtTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_medium"
+        android:text="@string/txtFlyOut"
+        android:textColor="#5f5f94"
+        android:textSize="20dp"
+        android:typeface="monospace"
+        tools:context=".MainActivity"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/txtIPAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/hintIP"
+        android:text="192.168.1.1"
+        android:layout_below="@+id/txtTitle"
+        android:layout_alignParentLeft="true" />
+
+    <Button
+        android:id="@+id/btnConnect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/txtIPAddress"
+        android:layout_toRightOf="@+id/txtIPAddress"
+        android:text="@string/txtConnect" />
+
+    <ImageView
+        android:id="@+id/imgRobot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_soultwine"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_above="@+id/txtIPAddress"
+        android:layout_toLeftOf="@+id/txtTitle" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:background="#000"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        tools:context=".PsychLinkMain"
+        android:layout_below="@+id/btnConnect">
+        <ScrollView
+            android:id="@+id/scrollView1"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_width="match_parent" >
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:orientation="vertical" >
+                <TextView
+                    android:background="#000"
+                    android:id="@+id/tvOutput"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:overScrollMode="always"
+                    android:scrollbars="vertical"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#FFF"
+                    />
+            </LinearLayout>
+        </ScrollView>
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:minHeight="80dp" >
+            <EditText
+                android:background="#000"
+                android:ems="10"
+                android:id="@+id/etInput"
+                android:inputType="textNoSuggestions"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_width="wrap_content"
+                android:minHeight="60dp"
+                android:textColor="#FFF" >
+                <requestFocus />
+            </EditText>
+            <Button
+                android:id="@+id/btnParse"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:minHeight="60dp"
+                android:text="Send" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <com.romainclaret.android.soulkeeper.SoulView
+        android:id="@+id/ps"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/btnConnect"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="30dp" />
+
+
+</RelativeLayout>

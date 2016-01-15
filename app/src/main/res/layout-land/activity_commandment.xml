@@ -1,0 +1,88 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/txtMovementSequence"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:padding="@dimen/padding_medium"
+        android:text="@string/txtMovement"
+        android:textColor="#000080"
+        android:textSize="20dp"
+        android:typeface="monospace"
+        tools:context=".MainActivity"
+        android:layout_marginTop="60dp" />
+
+    <Button
+        android:id="@+id/btnStand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/btnForward"
+        android:layout_below="@+id/txtMovementSequence"
+        android:layout_marginTop="30dp"
+        android:onClick="standPressed"
+        android:text="@string/txtStand" />
+
+    <Button
+        android:id="@+id/btnSit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btnStand"
+        android:layout_alignBottom="@+id/btnStand"
+        android:layout_alignLeft="@+id/btnBackward"        
+        android:layout_alignParentRight="true"
+        android:onClick="sitPressed"
+        android:text="@string/txtSit" />
+
+    <Button
+        android:id="@+id/btnForward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/btnStand"
+        android:onClick="forwardPressed"
+        android:text="@string/txtForward" />
+
+    <Button
+        android:id="@+id/btnBackward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/btnForward"
+        android:layout_alignParentRight="true"
+        android:onClick="backwardPressed"
+        android:text="@string/txtBackward" />
+
+    <Button
+        android:id="@+id/btnLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/btnForward"
+        android:layout_below="@+id/btnForward"
+        android:onClick="leftPressed"
+        android:text="@string/txtLeft" />
+
+    <Button
+        android:id="@+id/btnRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btnLeft"
+        android:layout_alignBottom="@+id/btnLeft"
+        android:layout_alignLeft="@+id/btnBackward"
+        android:layout_alignParentRight="true"
+        android:onClick="rightPressed"
+        android:text="@string/txtRight" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/txtBattery"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true" />
+
+</RelativeLayout>

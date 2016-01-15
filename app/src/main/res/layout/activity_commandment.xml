@@ -1,0 +1,183 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <com.romainclaret.android.soulkeeper.SoulView
+        android:id="@+id/ps"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true" />
+
+    <ImageView
+        android:id="@+id/imgRobot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_soultwine"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignBottom="@+id/txtTitle"
+        android:layout_toStartOf="@+id/txtTitle" />
+
+    <TextView
+        android:id="@+id/txtTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_medium"
+        android:text="@string/txtFlyOut"
+        android:textColor="#5f5f94"
+        android:textSize="20dp"
+        android:typeface="monospace"
+        tools:context=".MainActivity"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/txtMovementSequence"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_medium"
+        android:text="@string/txtMovement"
+        android:textColor="#ffffff"
+        android:textSize="20dp"
+        android:typeface="monospace"
+        tools:context=".MainActivity"
+        android:layout_below="@+id/txtTitle"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/btnStand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="standPressed"
+        android:text="@string/txtStand"
+        android:layout_below="@+id/txtMovementSequence"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/imageView"
+        android:layout_alignEnd="@+id/btnForward" />
+
+    <Button
+        android:id="@+id/btnSit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btnStand"
+        android:layout_alignBottom="@+id/btnStand"
+        android:layout_alignLeft="@+id/btnBackward"        
+        android:layout_alignParentRight="true"
+        android:onClick="sitPressed"
+        android:text="@string/txtSit" />
+
+    <Button
+        android:id="@+id/btnForward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/btnStand"
+        android:onClick="forwardPressed"
+        android:text="@string/txtForward" />
+
+    <Button
+        android:id="@+id/btnBackward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/btnForward"
+        android:layout_alignParentRight="true"
+        android:onClick="backwardPressed"
+        android:text="@string/txtBackward" />
+
+    <Button
+        android:id="@+id/btnLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/btnForward"
+        android:layout_below="@+id/btnForward"
+        android:onClick="leftPressed"
+        android:text="@string/txtLeft" />
+
+    <Button
+        android:id="@+id/btnRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btnLeft"
+        android:layout_alignBottom="@+id/btnLeft"
+        android:layout_alignLeft="@+id/btnBackward"
+        android:layout_alignParentRight="true"
+        android:onClick="rightPressed"
+        android:text="@string/txtRight" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:src="@drawable/icon_soultwine"
+        android:layout_below="@+id/txtMovementSequence"
+        android:layout_centerHorizontal="true"
+        android:paddingLeft="-20dp"
+        android:paddingTop="20dp" />
+
+
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Accelero Move"
+        android:id="@+id/toggleButton"
+        android:checked="false"
+        android:textColor="#000000"
+        android:layout_below="@+id/btnRight"
+        android:layout_alignEnd="@+id/txtMovementSequence" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/txtNAOAcceleroMove"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/toggleButton"
+        android:layout_alignEnd="@+id/toggleButton"
+        android:textColor="#ffffff"
+        android:layout_marginRight="-18dp" />
+
+    <EditText
+        android:id="@+id/etSequences"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:ems="7"
+        android:inputType="textNoSuggestions"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="129dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:id="@+id/btnRun"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="63dp"
+        android:onClick="runSequencePressed"
+        android:text="@string/txtNAORunSequences"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Accelero Move"
+        android:id="@+id/toggleButton2"
+        android:checked="false"
+        android:textColor="#000000"
+        android:layout_above="@+id/textView2"
+        android:layout_alignStart="@+id/txtMovementSequence" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/txtNAOSaveSequences"
+        android:id="@+id/textView3"
+        android:textColor="#ffffff"
+        android:layout_alignTop="@+id/textView2"
+        android:layout_alignStart="@+id/toggleButton2"
+        android:layout_marginLeft="-7dp" />
+
+</RelativeLayout>

@@ -1,0 +1,38 @@
+<resources>
+
+    <string name="app_name">Soul Twine</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_naoconnect">Soul Twine</string>
+    <string name="txtConnect">Connect</string>
+    <string name="hintIP">IP Address</string>
+    <string name="txtFlyOut">Your droid soul holder</string>
+    <string name="txtControlTools">Control Tools</string>
+    <string name="txtTilt">Tilt Control</string>
+    <string name="txtSequence">Remote Control</string>
+    <string name="txtBattery">Battery Status: TODO</string>
+    <string name="txtSavedMovements">Saved Sequences</string>
+    <string name="txtSavedList">Saved Movement Sequences</string>
+    <string name="txtMovement">Give an order</string>
+    <string name="txtMovementAuto">Create Movement Sequence</string>
+    <string name="txtName">Name:</string>
+    <string name="txtStandAuto">Stand</string><string name="txtStand">Stand</string>
+    <string name="txtSitAuto">Sit Down</string><string name="txtSit">Sit Down</string>
+    <string name="txtSave">Save Sequence</string>
+    <string name="txtForwardAuto">Walk Forward</string><string name="txtForward">Walk Forward</string>
+    <string name="txtBackwardAuto">Walk Backward</string><string name="txtBackward">Walk Backward</string>
+    <string name="txtLeftAuto">Turn Left</string><string name="txtLeft">Turn Left</string>
+    <string name="txtRightAuto">Turn Right</string><string name="txtRight">Turn Right</string>
+    <string name="txtObject">Object Interaction</string><string name="heading_string">Sequence Name       -     Sequence Type</string>
+    <string name="txtManualSequences">Manual</string>
+    <string name="txtAutoSequences">Auto </string>
+    <string name="txtNAOSequences">Control</string>
+    <string name="txtNAOSaveSequences">Sequences</string>
+    <string name="txtNAOAcceleroMove">Accelero Move</string>
+    <string name="txtNAORunSequences">Run Sequences</string>
+
+    <string name="dummy_section_text">Section %1d is just a dummy section.</string>
+    <string name="demo_external_activity">Demo External Activity</string>
+    <string name="demo_collection">Demo Collection</string>
+
+</resources>
