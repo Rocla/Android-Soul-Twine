@@ -6,7 +6,7 @@ Create an android Soul on your smartphone. Model it and teach it by interacting 
 
 The project is developed for Android OS with Android Studio & NAOqi with Nao.
 
-## Current version: 0.0.0
+## Current version: 1.0.0
 
 ## Wiki
 
