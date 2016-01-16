@@ -1,12 +1,13 @@
-apply plugin: 'com.android.library'
+apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 19
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 23
+        applicationId "com.romainclaret.android.soulkeeper"
+        minSdkVersion 11
+        targetSdkVersion 11
     }
 
     buildTypes {
