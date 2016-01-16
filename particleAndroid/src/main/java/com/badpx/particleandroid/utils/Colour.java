@@ -30,6 +30,18 @@ public class Colour {
         this.b = b;
     }
 
+    public static int rgb(float r, float g, float b) {
+        return Color.rgb(
+                (int) (r * 255f), (int) (g * 255f), (int) (b * 255f)
+        );
+    }
+
+    public static int argb(float a, float r, float g, float b) {
+        return Color.argb(
+                (int) (a * 255f), (int) (r * 255f), (int) (g * 255f), (int) (b * 255f)
+        );
+    }
+
     public boolean isEmpty() {
         return 0 == a && 0 == r && 0 == g && 0 == b;
     }
@@ -39,17 +51,5 @@ public class Colour {
         r = colour.r;
         g = colour.g;
         b = colour.b;
-    }
-
-    public static int rgb(float r, float g, float b) {
-        return Color.rgb(
-                (int) (r * 255f), (int) (g * 255f), (int) (b * 255f)
-        );
-    }
-
-    public static int argb(float a, float r, float g, float b) {
-        return Color.argb(
-                (int)(a * 255f), (int)(r * 255f), (int)(g * 255f), (int)(b * 255f)
-        );
     }
 }

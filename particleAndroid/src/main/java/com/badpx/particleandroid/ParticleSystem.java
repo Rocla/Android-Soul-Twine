@@ -13,9 +13,14 @@
  */
 package com.badpx.particleandroid;
 
-import android.graphics.*;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Xfermode;
 import android.os.Handler;
 import android.os.SystemClock;
+
 import com.badpx.particleandroid.utils.Colour;
 import com.badpx.particleandroid.utils.Misc;
 import com.badpx.particleandroid.utils.Point;
@@ -87,7 +92,9 @@ public class ParticleSystem implements Runnable {
     protected EmitterMode mEmitterMode;
     protected int mInterval = 1000 / 60;
     protected Handler mHandler;
-    /** Is the emitter active */
+    /**
+     * Is the emitter active
+     */
     boolean mIsActive = false;
     protected WeakReference<UpdateCallback> mCallbackRef;
     protected PorterDuff.Mode mColorFilterMode = PorterDuff.Mode.MULTIPLY;
@@ -112,35 +119,61 @@ public class ParticleSystem implements Runnable {
     // Different modes
     //! Mode A:Gravity + Tangential Accel + Radial Accel
     public class ModeA {
-        /** Gravity value. Only available in 'Gravity' mode. */
+        /**
+         * Gravity value. Only available in 'Gravity' mode.
+         */
         public Point gravity;
-        /** speed of each particle. Only available in 'Gravity' mode.  */
+        /**
+         * speed of each particle. Only available in 'Gravity' mode.
+         */
         public float speed;
-        /** speed variance of each particle. Only available in 'Gravity' mode. */
+        /**
+         * speed variance of each particle. Only available in 'Gravity' mode.
+         */
         public float speedVar;
-        /** tangential acceleration of each particle. Only available in 'Gravity' mode. */
+        /**
+         * tangential acceleration of each particle. Only available in 'Gravity' mode.
+         */
         public float tangentialAccel;
-        /** tangential acceleration variance of each particle. Only available in 'Gravity' mode. */
+        /**
+         * tangential acceleration variance of each particle. Only available in 'Gravity' mode.
+         */
         public float tangentialAccelVar;
-        /** radial acceleration of each particle. Only available in 'Gravity' mode. */
+        /**
+         * radial acceleration of each particle. Only available in 'Gravity' mode.
+         */
         public float radialAccel;
-        /** radial acceleration variance of each particle. Only available in 'Gravity' mode. */
+        /**
+         * radial acceleration variance of each particle. Only available in 'Gravity' mode.
+         */
         public float radialAccelVar;
     }
 
     //! Mode B: circular movement (gravity, radial accel and tangential accel don't are not used in this mode)
     class ModeB {
-        /** The starting radius of the particles. Only available in 'Radius' mode. */
+        /**
+         * The starting radius of the particles. Only available in 'Radius' mode.
+         */
         public float startRadius;
-        /** The starting radius variance of the particles. Only available in 'Radius' mode. */
+        /**
+         * The starting radius variance of the particles. Only available in 'Radius' mode.
+         */
         public float startRadiusVar;
-        /** The ending radius of the particles. Only available in 'Radius' mode. */
+        /**
+         * The ending radius of the particles. Only available in 'Radius' mode.
+         */
         public float endRadius;
-        /** The ending radius variance of the particles. Only available in 'Radius' mode. */
+        /**
+         * The ending radius variance of the particles. Only available in 'Radius' mode.
+         */
         public float endRadiusVar;
-        /** Number of degrees to rotate a particle around the source pos per second. Only available in 'Radius' mode. */
+        /**
+         * Number of degrees to rotate a particle around the source pos per second. Only available in 'Radius' mode.
+         */
         public float rotatePerSecond;
-        /** Variance in degrees for rotatePerSecond. Only available in 'Radius' mode. */
+        /**
+         * Variance in degrees for rotatePerSecond. Only available in 'Radius' mode.
+         */
         public float rotatePerSecondVar;
     }
 
@@ -153,7 +186,7 @@ public class ParticleSystem implements Runnable {
             long timestamp = SystemClock.uptimeMillis();
             long diff = timestamp - mLastTimestamp;
             mLastTimestamp = timestamp;
-            delta = (float)diff / 1000f;  // Time delta in second
+            delta = (float) diff / 1000f;  // Time delta in second
         }
 
         update(delta);
@@ -265,8 +298,7 @@ public class ParticleSystem implements Runnable {
         return modeA.gravity;
     }
 
-    public void setSpeed(float speed)
-    {
+    public void setSpeed(float speed) {
         MyAssert(mEmitterMode == EmitterMode.MODE_GRAVITY, "Particle Mode should be Gravity");
         modeA.speed = speed;
     }
@@ -347,8 +379,7 @@ public class ParticleSystem implements Runnable {
         return modeB.rotatePerSecondVar;
     }
 
-    public boolean isActive()
-    {
+    public boolean isActive() {
         return mIsActive;
     }
 
@@ -376,8 +407,7 @@ public class ParticleSystem implements Runnable {
         return mPosVar;
     }
 
-    public void setPosVar(Point var)
-    {
+    public void setPosVar(Point var) {
         mPosVar.set(var.x, var.y);
     }
 
@@ -500,6 +530,7 @@ public class ParticleSystem implements Runnable {
     public void setEndSpin(float var) {
         mEndSpin = var;
     }
+
     public float getEndSpinVar() {
         return mEndSpinVar;
     }
@@ -520,7 +551,7 @@ public class ParticleSystem implements Runnable {
         return mTotalParticles;
     }
 
-    public void setTotalParticles( int var) {
+    public void setTotalParticles(int var) {
         MyAssert(var <= mAllocatedParticles, "Particle: resizing particle array only supported for quads");
         mTotalParticles = var;
     }
@@ -599,24 +630,24 @@ public class ParticleSystem implements Runnable {
 
         // Color
         int start;
-        int r = Misc.clamp(Color.red(mStartColor) + (int)(Color.red(mStartColorVar) * randomMinus1To1()), 0, 255);
+        int r = Misc.clamp(Color.red(mStartColor) + (int) (Color.red(mStartColorVar) * randomMinus1To1()), 0, 255);
         int g = Misc.clamp(Color.green(mStartColor) + (int) (Color.green(mStartColorVar) * randomMinus1To1()), 0, 255);
         int b = Misc.clamp(Color.blue(mStartColor) + (int) (Color.blue(mStartColorVar) * randomMinus1To1()), 0, 255);
         int a = Misc.clamp(Color.alpha(mStartColor) + (int) (Color.alpha(mStartColorVar) * randomMinus1To1()), 0, 255);
         start = Color.argb(a, r, g, b);
 
         int end;
-        r = Misc.clamp(Color.red(mEndColor) + (int)(Color.red(mEndColorVar) * randomMinus1To1()), 0, 255);
-        g = Misc.clamp(Color.green(mEndColor) + (int)(Color.green(mEndColorVar) * randomMinus1To1()), 0, 255);
-        b = Misc.clamp(Color.blue(mEndColor) + (int)(Color.blue(mEndColorVar) * randomMinus1To1()), 0, 255);
-        a = Misc.clamp(Color.alpha(mEndColor) + (int)(Color.alpha(mEndColorVar) * randomMinus1To1()), 0, 255);
+        r = Misc.clamp(Color.red(mEndColor) + (int) (Color.red(mEndColorVar) * randomMinus1To1()), 0, 255);
+        g = Misc.clamp(Color.green(mEndColor) + (int) (Color.green(mEndColorVar) * randomMinus1To1()), 0, 255);
+        b = Misc.clamp(Color.blue(mEndColor) + (int) (Color.blue(mEndColorVar) * randomMinus1To1()), 0, 255);
+        a = Misc.clamp(Color.alpha(mEndColor) + (int) (Color.alpha(mEndColorVar) * randomMinus1To1()), 0, 255);
         end = Color.argb(a, r, g, b);
 
         particle.color = start;
-        r = (int)((Color.red(end) - Color.red(start)) / particle.timeToLive);
-        g = (int)((Color.green(end) - Color.green(start)) / particle.timeToLive);
-        b = (int)((Color.blue(end) - Color.blue(start)) / particle.timeToLive);
-        a = (int)((Color.alpha(end) - Color.alpha(start)) / particle.timeToLive);
+        r = (int) ((Color.red(end) - Color.red(start)) / particle.timeToLive);
+        g = (int) ((Color.green(end) - Color.green(start)) / particle.timeToLive);
+        b = (int) ((Color.blue(end) - Color.blue(start)) / particle.timeToLive);
+        a = (int) ((Color.alpha(end) - Color.alpha(start)) / particle.timeToLive);
         particle.deltaColor = new Colour(a, r, g, b);
 
         // size
@@ -625,7 +656,7 @@ public class ParticleSystem implements Runnable {
 
         particle.size = startS;
 
-        if( mEndSize < 0 ) {
+        if (mEndSize < 0) {
             particle.deltaSize = 0;
         } else {
             float endS = mEndSize + mEndSizeVar * randomMinus1To1();
@@ -639,7 +670,7 @@ public class ParticleSystem implements Runnable {
         particle.rotation = startA;
         particle.deltaRotation = (endA - startA) / particle.timeToLive;
 
-        if( mPositionType == PositionType.POSITION_GROUP) {
+        if (mPositionType == PositionType.POSITION_GROUP) {
             particle.startPos = new Point();
         } else {
             particle.startPos = new Point(mPosition);
@@ -650,11 +681,11 @@ public class ParticleSystem implements Runnable {
 
         // Mode Gravity: A
         if (mEmitterMode == EmitterMode.MODE_GRAVITY) {
-            Point v = new Point((float)Math.cos(radians), (float)Math.sin( radians ));
+            Point v = new Point((float) Math.cos(radians), (float) Math.sin(radians));
             float s = modeA.speed + modeA.speedVar * randomMinus1To1();
 
             // direction
-            particle.modeA.dir = Point.mult( v, s );
+            particle.modeA.dir = Point.mult(v, s);
 
             // radial accel
             particle.modeA.radialAccel = modeA.radialAccel + modeA.radialAccelVar * randomMinus1To1();
@@ -669,7 +700,7 @@ public class ParticleSystem implements Runnable {
 
             particle.modeB.radius = startRadius;
 
-            if(modeB.endRadius < 0) {
+            if (modeB.endRadius < 0) {
                 particle.modeB.deltaRadius = 0;
             } else {
                 particle.modeB.deltaRadius = (endRadius - startRadius) / particle.timeToLive;
@@ -681,7 +712,9 @@ public class ParticleSystem implements Runnable {
         }
     }
 
-    /** Start the particle system.*/
+    /**
+     * Start the particle system.
+     */
     public void startup() {
         if (!mIsActive) {
             mHandler.post(this);
@@ -689,7 +722,9 @@ public class ParticleSystem implements Runnable {
         }
     }
 
-    /** Stop the particle system and remove all living particles Immediately.*/
+    /**
+     * Stop the particle system and remove all living particles Immediately.
+     */
     public void shutdown() {
         if (mIsActive) {
             reset();
@@ -700,37 +735,46 @@ public class ParticleSystem implements Runnable {
         }
     }
 
-    /** Restart a died system to emitting again.*/
+    /**
+     * Restart a died system to emitting again.
+     */
     public void startEmitting() {
         mIsActive = true;
         mElapsed = 0;
     }
 
-    /** stop emitting particles. Running particles will continue to run until they die*/
+    /**
+     * stop emitting particles. Running particles will continue to run until they die
+     */
     public void stopEmitting() {
         mIsActive = false;
         mElapsed = mDuration;
         mEmitCounter = 0;
     }
 
-    /** Remove all living particles and restart emitting.*/
+    /**
+     * Remove all living particles and restart emitting.
+     */
     public void reset() {
         mIsActive = true;
         mElapsed = 0;
-        for (mParticleIdx = 0; mParticleIdx < mParticleCount; ++mParticleIdx)
-        {
+        for (mParticleIdx = 0; mParticleIdx < mParticleCount; ++mParticleIdx) {
             Particle p = mParticles[mParticleIdx];
             p.timeToLive = 0;
         }
     }
 
-    /** Pause emitting and freeze all living particles util resume */
+    /**
+     * Pause emitting and freeze all living particles util resume
+     */
     public void pause() {
         mHandler.removeCallbacks(this);
         mIsPaused = true;
     }
 
-    /** Resume emitting and unfreeze living particles. */
+    /**
+     * Resume emitting and unfreeze living particles.
+     */
     public void resume() {
         if (mIsPaused) {
             mLastTimestamp = SystemClock.uptimeMillis();
@@ -761,20 +805,17 @@ public class ParticleSystem implements Runnable {
         if (mIsActive && mEmissionRate > 0) {
             float rate = 1.0f / mEmissionRate;
             //issue #1201, prevent bursts of particles, due to too high emitCounter
-            if (mParticleCount < mTotalParticles)
-            {
+            if (mParticleCount < mTotalParticles) {
                 mEmitCounter += dt;
             }
 
-            while (mParticleCount < mTotalParticles && mEmitCounter > rate)
-            {
+            while (mParticleCount < mTotalParticles && mEmitCounter > rate) {
                 this.addParticle();
                 mEmitCounter -= rate;
             }
 
             mElapsed += dt;
-            if (mDuration != -1 && mDuration < mElapsed)
-            {
+            if (mDuration != -1 && mDuration < mElapsed) {
                 this.stopEmitting();
             }
         }
@@ -789,11 +830,9 @@ public class ParticleSystem implements Runnable {
                 // life
                 p.timeToLive -= dt;
 
-                if (p.timeToLive > 0)
-                {
+                if (p.timeToLive > 0) {
                     // Mode A: gravity, direction, tangential accel & radial accel
-                    if (mEmitterMode == EmitterMode.MODE_GRAVITY)
-                    {
+                    if (mEmitterMode == EmitterMode.MODE_GRAVITY) {
                         Point tmp, radial, tangential;
 
                         // radial acceleration
@@ -824,8 +863,8 @@ public class ParticleSystem implements Runnable {
                         p.modeB.angle += p.modeB.degreesPerSecond * dt;
                         p.modeB.radius += p.modeB.deltaRadius * dt;
 
-                        p.pos.x = (float) (- Math.cos(p.modeB.angle) * p.modeB.radius);
-                        p.pos.y = (float) (- Math.sin(p.modeB.angle) * p.modeB.radius);
+                        p.pos.x = (float) (-Math.cos(p.modeB.angle) * p.modeB.radius);
+                        p.pos.y = (float) (-Math.sin(p.modeB.angle) * p.modeB.radius);
                     }
 
                     // color
@@ -837,7 +876,7 @@ public class ParticleSystem implements Runnable {
 
                     // size
                     p.size += (p.deltaSize * dt);
-                    p.size = Math.max( 0, p.size );
+                    p.size = Math.max(0, p.size);
 
                     // angle
                     p.rotation += (p.deltaRotation * dt);
@@ -845,8 +884,7 @@ public class ParticleSystem implements Runnable {
                     // update particle counter
                     ++mParticleIdx;
                 } else { // life < 0
-                    if( mParticleIdx != mParticleCount - 1 )
-                    {
+                    if (mParticleIdx != mParticleCount - 1) {
                         mParticles[mParticleIdx].copy(mParticles[mParticleCount - 1]);
                     }
 

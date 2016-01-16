@@ -17,6 +17,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
+
 import com.badpx.particleandroid.ParticleSystem;
 
 import java.util.HashSet;
@@ -31,11 +32,11 @@ public class ParticleSystemView extends View {
     protected Set<ParticleSystem> mParticleSystems;
     private ParticleSystem.UpdateCallback mUpdateCallback =
             new ParticleSystem.UpdateCallback() {
-                    @Override
-                    public void needInvalidate() {
-                        ParticleSystemView.this.invalidate();
-                    }
-                };
+                @Override
+                public void needInvalidate() {
+                    ParticleSystemView.this.invalidate();
+                }
+            };
 
     public ParticleSystemView(Context context) {
         super(context);

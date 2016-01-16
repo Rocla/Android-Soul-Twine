@@ -1,25 +1,15 @@
 package com.romainclaret.android.soultwine;
 
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Locale;
-import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.speech.tts.TextToSpeech;
@@ -48,28 +38,66 @@ import org.alicebot.ab.MagicBooleans;
 import org.alicebot.ab.MagicStrings;
 import org.alicebot.ab.PCAIMLProcessorExtension;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Locale;
+import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class MainActivity extends Activity implements View.OnTouchListener {
 
-    Button btnConnect;
-    EditText txtIPAddress;
-    String ipString;
-
-    public Bot bot;
+    private static final ParticleSystemCreator[] PARTICLE_INFOS = {
+            new PListCreator("Galaxy.plist"),
+    };
     public static Chat chat;
+    public Bot bot;
     public TextView tvOutput;
     public ScrollView svOutput;
     public EditText etInput;
     public Button btnParse;
     public TextToSpeech speech;
-
+    Button btnConnect;
+    EditText txtIPAddress;
+    String ipString;
     private Thread thread;
-    private ParticleSystem mParticleSystem;
-    private int mIndex = 0;
+    private ParticleSystem particleSystem;
+    private int particuleIndex = 0;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+    private OnClickListener btnConnectPressedListener = new OnClickListener() {
+        public void onClick(View v) {
+            Pattern pattern = Pattern.compile("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}");
+            ipString = txtIPAddress.getText().toString();
+            Matcher matcher = pattern.matcher(ipString);
+            if (matcher.matches()) {
+                connectSuccessPopup();
+                txtIPAddress.setText("");
+            } else if (ipString.equals("Nope")) {
+                connectUnsuccessPopup();
+                txtIPAddress.setText("");
+            } else {
+                incorrectIPPopup();
+                txtIPAddress.setText("");
+            }
+        }
+    };
+
+    public static void mainFunction() {
+        MagicBooleans.trace_mode = false;
+        Graphmaster.enableShortCuts = true;
+    }
+
+    public static int randInt(int min, int max) {
+        Random rand = new Random();
+        return rand.nextInt((max - min) + 1) + min;
+    }
 
     @Override
     public void onStart() {
@@ -110,36 +138,6 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
     }
-
-    interface ParticleSystemCreator {
-        ParticleSystem create(Resources resources);
-    }
-
-    static class PListCreator implements ParticleSystemCreator {
-        final String plistPath;
-        ParticleSystem particleSystem;
-
-        public PListCreator(String plistPath) {
-            this.plistPath = plistPath;
-        }
-
-        @Override
-        public String toString() {
-            return plistPath;
-        }
-
-        @Override
-        public ParticleSystem create(Resources resources) {
-            if (null == particleSystem) {
-                particleSystem = PListParticleSystemHelper.create(resources, plistPath);
-            }
-            return particleSystem;
-        }
-    }
-
-    private static final ParticleSystemCreator[] PARTICLE_INFOS = {
-            new PListCreator("Galaxy.plist"),
-    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -309,35 +307,12 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         alertDialogConnect.show();
     }
 
-    private OnClickListener btnConnectPressedListener = new OnClickListener() {
-        public void onClick(View v) {
-            Pattern pattern = Pattern.compile("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}");
-            ipString = txtIPAddress.getText().toString();
-            Matcher matcher = pattern.matcher(ipString);
-            if (matcher.matches()) {
-                connectSuccessPopup();
-                txtIPAddress.setText("");
-            } else if (ipString.equals("Nope")) {
-                connectUnsuccessPopup();
-                txtIPAddress.setText("");
-            } else {
-                incorrectIPPopup();
-                txtIPAddress.setText("");
-            }
-        }
-    };
-
     private void copyFile(InputStream in, OutputStream out) throws IOException {
         byte[] buffer = new byte[1024];
         int read;
         while ((read = in.read(buffer)) != -1) {
             out.write(buffer, 0, read);
         }
-    }
-
-    public static void mainFunction() {
-        MagicBooleans.trace_mode = false;
-        Graphmaster.enableShortCuts = true;
     }
 
     protected void onPause() {
@@ -358,17 +333,17 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         int posX = (getResources().getDisplayMetrics().widthPixels - 20) / 2;
         int posY = (getResources().getDisplayMetrics().heightPixels - 470) / 2;
 
-        if (null != mParticleSystem) {
+        if (null != particleSystem) {
             // Stop previous particle emitter if it exists.
-            mParticleSystem.shutdown();
+            particleSystem.shutdown();
         }
 
-        mParticleSystem = PARTICLE_INFOS[mIndex].create(getResources());
-        if (null != mParticleSystem) {
+        particleSystem = PARTICLE_INFOS[particuleIndex].create(getResources());
+        if (null != particleSystem) {
 
-            particleView.addParticleSystem(mParticleSystem);
-            mParticleSystem.setPosition(posX, posY);
-            mParticleSystem.startup();
+            particleView.addParticleSystem(particleSystem);
+            particleSystem.setPosition(posX, posY);
+            particleSystem.startup();
             particleView.setOnTouchListener(this);
         }
 
@@ -397,25 +372,25 @@ public class MainActivity extends Activity implements View.OnTouchListener {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        currentPosX = mParticleSystem.getPositionX();
-                        currentPosY = mParticleSystem.getPositionY();
+                        currentPosX = particleSystem.getPositionX();
+                        currentPosY = particleSystem.getPositionY();
 
                         if (travelToX < currentPosX && travelToY < currentPosY) {
-                            mParticleSystem.setPosition(currentPosX - displacementDistance, currentPosY - displacementDistance);
+                            particleSystem.setPosition(currentPosX - displacementDistance, currentPosY - displacementDistance);
                         } else if (travelToX < currentPosX && travelToY > currentPosY) {
-                            mParticleSystem.setPosition(currentPosX - displacementDistance, currentPosY + displacementDistance);
+                            particleSystem.setPosition(currentPosX - displacementDistance, currentPosY + displacementDistance);
                         } else if (travelToX > currentPosX && travelToY < currentPosY) {
-                            mParticleSystem.setPosition(currentPosX + displacementDistance, currentPosY - displacementDistance);
+                            particleSystem.setPosition(currentPosX + displacementDistance, currentPosY - displacementDistance);
                         } else if (travelToX > currentPosX && travelToY > currentPosY) {
-                            mParticleSystem.setPosition(currentPosX + displacementDistance, currentPosY + displacementDistance);
+                            particleSystem.setPosition(currentPosX + displacementDistance, currentPosY + displacementDistance);
                         } else if (travelToX.intValue() == currentPosX && travelToY < currentPosY) {
-                            mParticleSystem.setPosition(currentPosX, currentPosY - displacementDistance);
+                            particleSystem.setPosition(currentPosX, currentPosY - displacementDistance);
                         } else if (travelToX.intValue() == currentPosX && travelToY > currentPosY) {
-                            mParticleSystem.setPosition(currentPosX, currentPosY + displacementDistance);
+                            particleSystem.setPosition(currentPosX, currentPosY + displacementDistance);
                         } else if (travelToX > currentPosX && travelToY.intValue() == currentPosY) {
-                            mParticleSystem.setPosition(currentPosX + displacementDistance, currentPosY);
+                            particleSystem.setPosition(currentPosX + displacementDistance, currentPosY);
                         } else if (travelToX < currentPosX && travelToY.intValue() == currentPosY) {
-                            mParticleSystem.setPosition(currentPosX - displacementDistance, currentPosY);
+                            particleSystem.setPosition(currentPosX - displacementDistance, currentPosY);
                         }
                     }
                     while (currentPosX != travelToX.intValue() && currentPosY != travelToY.intValue());
@@ -426,14 +401,35 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     }
 
     public boolean onTouch(View v, MotionEvent event) {
-        mParticleSystem.setPosition(event.getX(), event.getY());
-        System.out.println("X: " + event.getX());
-        System.out.println("Y: " + event.getY());
+        particleSystem.setPosition(event.getX(), event.getY());
+        //System.out.println("X: " + event.getX());
+        //System.out.println("Y: " + event.getY());
         return true;
     }
 
-    public static int randInt(int min, int max) {
-        Random rand = new Random();
-        return rand.nextInt((max - min) + 1) + min;
+    interface ParticleSystemCreator {
+        ParticleSystem create(Resources resources);
+    }
+
+    static class PListCreator implements ParticleSystemCreator {
+        final String plistPath;
+        ParticleSystem particleSystem;
+
+        public PListCreator(String plistPath) {
+            this.plistPath = plistPath;
+        }
+
+        @Override
+        public String toString() {
+            return plistPath;
+        }
+
+        @Override
+        public ParticleSystem create(Resources resources) {
+            if (null == particleSystem) {
+                particleSystem = PListParticleSystemHelper.create(resources, plistPath);
+            }
+            return particleSystem;
+        }
     }
 }

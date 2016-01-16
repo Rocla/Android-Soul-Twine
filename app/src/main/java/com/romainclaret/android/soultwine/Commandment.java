@@ -8,6 +8,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,7 +16,6 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
-import android.os.StrictMode;
 import android.widget.ToggleButton;
 
 import com.badpx.particleandroid.PListParticleSystemHelper;
@@ -27,69 +27,44 @@ import java.util.regex.PatternSyntaxException;
 
 public class Commandment extends Activity implements SensorEventListener, View.OnTouchListener {
 
-	String ipAddress;
+    private static final ParticleSystemCreator[] PARTICLE_INFOS = {
+            new PListCreator("Sun.plist"),
+    };
     static int i = 0;
     static String prevCommand = "";
-
-    private Thread thread;
-    private ParticleSystem mParticleSystem;
-    private int mIndex = 0;
-	private float[] mMagneticFieldData = new float[3];
-	private float[] mAccelerometerData = new float[3];
-	private float[] rotationMatrix = new float[16];
-	private float[] orientationValues = new float[4];
-	private SensorManager sensorManager;
-
     public ToggleButton tbAcceleroMove;
     public ToggleButton tbSequences;
     public EditText etSequences;
     public Button btnRun;
-
+    String ipAddress;
     boolean debugMode = false;
+    private Thread thread;
+    private ParticleSystem particleSystem;
+    private int particuleIndex = 0;
+    private float[] mMagneticFieldData = new float[3];
+    private float[] mAccelerometerData = new float[3];
+    private float[] rotationMatrix = new float[16];
+    private float[] orientationValues = new float[4];
+    private SensorManager sensorManager;
 
-    interface ParticleSystemCreator {
-        ParticleSystem create(Resources resources);
+    public static int randInt(int min, int max) {
+        Random rand = new Random();
+        return rand.nextInt((max - min) + 1) + min;
     }
 
-    static class PListCreator implements ParticleSystemCreator {
-        final String plistPath;
-        ParticleSystem particleSystem;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_commandment);
 
-        public PListCreator(String plistPath) {
-            this.plistPath = plistPath;
-        }
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
-        @Override
-        public String toString() {
-            return plistPath;
-        }
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        @Override
-        public ParticleSystem create(Resources resources) {
-            if (null == particleSystem) {
-                particleSystem = PListParticleSystemHelper.create(resources, plistPath);
-            }
-            return particleSystem;
-        }
-    }
+        ipAddress = this.getIntent().getExtras().getString("ipaddress");
 
-    private static final ParticleSystemCreator[] PARTICLE_INFOS = {
-            new PListCreator("Sun.plist"),
-    };
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_commandment);
-
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-		StrictMode.setThreadPolicy(policy);
-
-		this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		
-		ipAddress = this.getIntent().getExtras().getString("ipaddress");
-
-        sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         sensorManager.registerListener(this,
                 sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                 SensorManager.SENSOR_DELAY_NORMAL);
@@ -118,68 +93,51 @@ public class Commandment extends Activity implements SensorEventListener, View.O
         });
 
         setupParticleSystem();
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_main, menu);
-		return true;
-	}
+    }
 
     @Override
-    public void onBackPressed(){
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
         sensorManager.unregisterListener(this);
         ParticleSystemView particleView = (ParticleSystemView) findViewById(com.romainclaret.android.soulkeeper.R.id.ps);
         particleView.clearParticleSystems();
         finish();
     }
 
-    public void onAccuracyChanged(Sensor sensor, int accuracy)
-    {
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
 
-    public void runSequencePressed(View view)
-    {
+    public void runSequencePressed(View view) {
         try {
             String[] orders = etSequences.getText().toString().split("\\s+");
             for (String order : orders) {
-                if (order.equals("stand"))
-                {
+                if (order.equals("stand")) {
                     DroidPuppet.Stand(this);
                     Toast.makeText(getBaseContext(), "Order: " + order, Toast.LENGTH_LONG).show();
-                }
-                else if (order.equals("sit"))
-                {
+                } else if (order.equals("sit")) {
                     DroidPuppet.Sit(this);
                     Toast.makeText(getBaseContext(), "Order: " + order, Toast.LENGTH_LONG).show();
-                }
-                else if (order.equals("forward"))
-                {
+                } else if (order.equals("forward")) {
                     DroidPuppet.Forward();
                     Toast.makeText(getBaseContext(), "Order: " + order, Toast.LENGTH_LONG).show();
-                }
-                else if (order.equals("back"))
-                {
+                } else if (order.equals("back")) {
                     DroidPuppet.Backward();
                     Toast.makeText(getBaseContext(), "Order: " + order, Toast.LENGTH_LONG).show();
-                }
-                else if (order.equals("left"))
-                {
+                } else if (order.equals("left")) {
                     DroidPuppet.RotateLeft();
                     Toast.makeText(getBaseContext(), "Order: " + order, Toast.LENGTH_SHORT).show();
-                }
-                else if (order.equals("right"))
-                {
+                } else if (order.equals("right")) {
                     DroidPuppet.RotateRight();
                     Toast.makeText(getBaseContext(), "Order: " + order, Toast.LENGTH_SHORT).show();
-                }
-                else if (order.equals(""))
-                {
+                } else if (order.equals("")) {
 
-                }
-                else
-                {
+                } else {
                     Toast.makeText(getBaseContext(), "Unknown command: " + order, Toast.LENGTH_LONG).show();
                 }
             }
@@ -187,108 +145,76 @@ public class Commandment extends Activity implements SensorEventListener, View.O
             Toast.makeText(getBaseContext(), "Cannot communicate with distant soul.", Toast.LENGTH_LONG).show();
         }
     }
-    
-	public void standPressed(View view)
-    {
-        if(tbSequences.isChecked())
-        {
-            if(!etSequences.getText().equals(""))
-            {
+
+    public void standPressed(View view) {
+        if (tbSequences.isChecked()) {
+            if (!etSequences.getText().equals("")) {
                 etSequences.setText(etSequences.getText() + " ");
             }
             etSequences.setText(etSequences.getText() + "stand");
-        }
-        else
-        {
+        } else {
             DroidPuppet.Stand(this);
         }
-	}
-	
-	public void sitPressed(View view)
-    {
-        if(tbSequences.isChecked())
-        {
-            if(!etSequences.getText().equals(""))
-            {
+    }
+
+    public void sitPressed(View view) {
+        if (tbSequences.isChecked()) {
+            if (!etSequences.getText().equals("")) {
                 etSequences.setText(etSequences.getText() + " ");
             }
             etSequences.setText(etSequences.getText() + "sit");
-        }
-        else
-        {
+        } else {
             DroidPuppet.Sit(this);
         }
-	}
-	
-	public void forwardPressed(View view)
-    {
-        if(tbSequences.isChecked())
-        {
-            if(!etSequences.getText().equals(""))
-            {
+    }
+
+    public void forwardPressed(View view) {
+        if (tbSequences.isChecked()) {
+            if (!etSequences.getText().equals("")) {
                 etSequences.setText(etSequences.getText() + " ");
             }
             etSequences.setText(etSequences.getText() + "forward");
-        }
-        else
-        {
+        } else {
             DroidPuppet.Forward();
         }
-	}
-	
-	public void backwardPressed(View view)
-    {
-        if(tbSequences.isChecked())
-        {
-            if(!etSequences.getText().equals(""))
-            {
+    }
+
+    public void backwardPressed(View view) {
+        if (tbSequences.isChecked()) {
+            if (!etSequences.getText().equals("")) {
                 etSequences.setText(etSequences.getText() + " ");
             }
             etSequences.setText(etSequences.getText() + "back");
-        }
-        else
-        {
+        } else {
             DroidPuppet.Backward();
         }
-	}
-	
-	public void leftPressed(View view)
-    {
-        if(tbSequences.isChecked())
-        {
-            if(!etSequences.getText().equals(""))
-            {
+    }
+
+    public void leftPressed(View view) {
+        if (tbSequences.isChecked()) {
+            if (!etSequences.getText().equals("")) {
                 etSequences.setText(etSequences.getText() + " ");
             }
             etSequences.setText(etSequences.getText() + "left");
-        }
-        else
-        {
+        } else {
             DroidPuppet.RotateLeft();
         }
-	}
-	
-	public void rightPressed(View view)
-    {
-        if(tbSequences.isChecked())
-        {
-            if(!etSequences.getText().equals(""))
-            {
+    }
+
+    public void rightPressed(View view) {
+        if (tbSequences.isChecked()) {
+            if (!etSequences.getText().equals("")) {
                 etSequences.setText(etSequences.getText() + " ");
             }
             etSequences.setText(etSequences.getText() + "right");
-        }
-        else
-        {
+        } else {
             DroidPuppet.RotateRight();
         }
-	}
+    }
 
-    public void onSensorChanged(SensorEvent event)
-    {
-        if(tbAcceleroMove.isChecked())
-        {
-            switch (event.sensor.getType ()){
+    public void onSensorChanged(SensorEvent event) {
+        if (tbAcceleroMove.isChecked()) {
+            switch (event.sensor.getType()) {
                 case Sensor.TYPE_ACCELEROMETER:
                     mAccelerometerData = event.values.clone();
                     break;
@@ -301,12 +227,11 @@ public class Commandment extends Activity implements SensorEventListener, View.O
     }
 
     private void extractOrientationValues() {
-        if (SensorManager.getRotationMatrix(rotationMatrix, null, mAccelerometerData, mMagneticFieldData))
-        {
+        if (SensorManager.getRotationMatrix(rotationMatrix, null, mAccelerometerData, mMagneticFieldData)) {
             SensorManager.getOrientation(rotationMatrix, orientationValues);
 
-            float pitch = (float)Math.toDegrees(orientationValues[1]);
-            float roll = (float)Math.toDegrees(orientationValues[2]);
+            float pitch = (float) Math.toDegrees(orientationValues[1]);
+            float roll = (float) Math.toDegrees(orientationValues[2]);
 
             //convert to degrees
             pitch = (float) ((pitch + 360.0) % 360.0);
@@ -317,110 +242,91 @@ public class Commandment extends Activity implements SensorEventListener, View.O
 
     private void checkOrder(float pitch, float roll) {
 
-        boolean isRotateRight = pitch >= 0 && pitch <= 10  && roll >= 20 && roll <= 70;
-        boolean isRotateLeft = pitch >= 0 && pitch <= 10  && roll >= 260 && roll <= 315;
-        boolean isRotateFor = pitch >= 0 && pitch <= 50  && roll >= 0 && roll <= 50;
-        boolean isRotateBack = pitch >= 280 && pitch <= 320  && roll >= 170 && roll <= 200;
+        boolean isRotateRight = pitch >= 0 && pitch <= 10 && roll >= 20 && roll <= 70;
+        boolean isRotateLeft = pitch >= 0 && pitch <= 10 && roll >= 260 && roll <= 315;
+        boolean isRotateFor = pitch >= 0 && pitch <= 50 && roll >= 0 && roll <= 50;
+        boolean isRotateBack = pitch >= 280 && pitch <= 320 && roll >= 170 && roll <= 200;
 
-        if(isRotateRight)
-        {
-            if (prevCommand.equals("Right")){
+        if (isRotateRight) {
+            if (prevCommand.equals("Right")) {
                 i++;
-            }
-            else {
+            } else {
                 i = 1;
             }
             //doWhenRotateRight.run();
             prevCommand = "Right";
-            if (i >= 10){
+            if (i >= 10) {
                 DroidPuppet.RotateRight();
                 System.out.println("Right");
                 i = 0;
                 Toast.makeText(getBaseContext(), "Order: Right", Toast.LENGTH_SHORT).show();
-                if (debugMode)
-                {
+                if (debugMode) {
                     System.out.println("Pitch: " + pitch);
                     System.out.println("Roll: " + roll);
                 }
             }
-        }
-        else if(isRotateLeft)
-        {
-            if (prevCommand.equals("Left")){
+        } else if (isRotateLeft) {
+            if (prevCommand.equals("Left")) {
                 i++;
-            }
-            else {
+            } else {
                 i = 1;
             }
             prevCommand = "Left";
-            if (i >= 10){
+            if (i >= 10) {
                 DroidPuppet.RotateLeft();
                 System.out.println("Left");
                 i = 0;
                 Toast.makeText(getBaseContext(), "Order: Left", Toast.LENGTH_SHORT).show();
-                if (debugMode)
-                {
+                if (debugMode) {
                     System.out.println("Pitch: " + pitch);
                     System.out.println("Roll: " + roll);
                 }
             }
-        }
-        else if(isRotateFor)
-        {
-            if (prevCommand.equals("Forward")){
+        } else if (isRotateFor) {
+            if (prevCommand.equals("Forward")) {
                 i++;
-            }
-            else {
+            } else {
                 i = 1;
             }
             prevCommand = "Forward";
-            if (i >= 15){
+            if (i >= 15) {
                 DroidPuppet.Forward();
                 System.out.println("Forward");
                 i = 0;
                 Toast.makeText(getBaseContext(), "Order: Forward", Toast.LENGTH_SHORT).show();
-                if (debugMode)
-                {
+                if (debugMode) {
                     System.out.println("Pitch: " + pitch);
                     System.out.println("Roll: " + roll);
                 }
             }
-        }
-        else if(isRotateBack)
-        {
-            if (prevCommand.equals("Backward")){
+        } else if (isRotateBack) {
+            if (prevCommand.equals("Backward")) {
                 i++;
-            }
-            else {
+            } else {
                 i = 1;
             }
             prevCommand = "Backward";
-            if (i >= 15){
+            if (i >= 15) {
                 DroidPuppet.Backward();
                 System.out.println("Backward");
                 i = 0;
                 Toast.makeText(getBaseContext(), "Order: Backward", Toast.LENGTH_SHORT).show();
-                if (debugMode)
-                {
+                if (debugMode) {
                     System.out.println("Pitch: " + pitch);
                     System.out.println("Roll: " + roll);
                 }
             }
-        }
-        else
-        {
-            if (prevCommand.equals("Still")){
+        } else {
+            if (prevCommand.equals("Still")) {
                 i++;
-            }
-            else {
+            } else {
                 i = 1;
             }
             prevCommand = "Still";
-            if (i >= 9){
+            if (i >= 9) {
                 i = 0;
                 Toast.makeText(getBaseContext(), "No order detected", Toast.LENGTH_SHORT).show();
-                if (debugMode)
-                {
+                if (debugMode) {
                     System.out.println("Pitch: " + pitch);
                     System.out.println("Roll: " + roll);
                 }
@@ -441,17 +347,17 @@ public class Commandment extends Activity implements SensorEventListener, View.O
         int posX = getResources().getDisplayMetrics().widthPixels / 2;
         int posY = getResources().getDisplayMetrics().heightPixels / 2 - 400;
 
-        if (null != mParticleSystem) {
+        if (null != particleSystem) {
             // Stop previous particle emitter if it exists.
-            mParticleSystem.shutdown();
+            particleSystem.shutdown();
         }
 
-        mParticleSystem = PARTICLE_INFOS[mIndex].create(getResources());
-        if (null != mParticleSystem) {
+        particleSystem = PARTICLE_INFOS[particuleIndex].create(getResources());
+        if (null != particleSystem) {
 
-            particleView.addParticleSystem(mParticleSystem);
-            mParticleSystem.setPosition(posX, posY);
-            mParticleSystem.startup();
+            particleView.addParticleSystem(particleSystem);
+            particleSystem.setPosition(posX, posY);
+            particleSystem.startup();
             particleView.setOnTouchListener(this);
         }
 
@@ -476,29 +382,29 @@ public class Commandment extends Activity implements SensorEventListener, View.O
                     do {
                         try {
                             Thread.currentThread();
-                            Thread.sleep(10);
+                            Thread.sleep(5);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        currentPosX = mParticleSystem.getPositionX();
-                        currentPosY = mParticleSystem.getPositionY();
+                        currentPosX = particleSystem.getPositionX();
+                        currentPosY = particleSystem.getPositionY();
 
                         if (travelToX < currentPosX && travelToY < currentPosY) {
-                            mParticleSystem.setPosition(currentPosX - displacementDistance, currentPosY - displacementDistance);
+                            particleSystem.setPosition(currentPosX - displacementDistance, currentPosY - displacementDistance);
                         } else if (travelToX < currentPosX && travelToY > currentPosY) {
-                            mParticleSystem.setPosition(currentPosX - displacementDistance, currentPosY + displacementDistance);
+                            particleSystem.setPosition(currentPosX - displacementDistance, currentPosY + displacementDistance);
                         } else if (travelToX > currentPosX && travelToY < currentPosY) {
-                            mParticleSystem.setPosition(currentPosX + displacementDistance, currentPosY - displacementDistance);
+                            particleSystem.setPosition(currentPosX + displacementDistance, currentPosY - displacementDistance);
                         } else if (travelToX > currentPosX && travelToY > currentPosY) {
-                            mParticleSystem.setPosition(currentPosX + displacementDistance, currentPosY + displacementDistance);
+                            particleSystem.setPosition(currentPosX + displacementDistance, currentPosY + displacementDistance);
                         } else if (travelToX.intValue() == currentPosX && travelToY < currentPosY) {
-                            mParticleSystem.setPosition(currentPosX, currentPosY - displacementDistance);
+                            particleSystem.setPosition(currentPosX, currentPosY - displacementDistance);
                         } else if (travelToX.intValue() == currentPosX && travelToY > currentPosY) {
-                            mParticleSystem.setPosition(currentPosX, currentPosY + displacementDistance);
+                            particleSystem.setPosition(currentPosX, currentPosY + displacementDistance);
                         } else if (travelToX > currentPosX && travelToY.intValue() == currentPosY) {
-                            mParticleSystem.setPosition(currentPosX + displacementDistance, currentPosY);
+                            particleSystem.setPosition(currentPosX + displacementDistance, currentPosY);
                         } else if (travelToX < currentPosX && travelToY.intValue() == currentPosY) {
-                            mParticleSystem.setPosition(currentPosX - displacementDistance, currentPosY);
+                            particleSystem.setPosition(currentPosX - displacementDistance, currentPosY);
                         }
                     }
                     while (currentPosX != travelToX.intValue() && currentPosY != travelToY.intValue());
@@ -509,12 +415,33 @@ public class Commandment extends Activity implements SensorEventListener, View.O
     }
 
     public boolean onTouch(View v, MotionEvent event) {
-        mParticleSystem.setPosition(event.getX(), event.getY());
+        particleSystem.setPosition(event.getX(), event.getY());
         return true;
     }
 
-    public static int randInt(int min, int max) {
-        Random rand = new Random();
-        return rand.nextInt((max - min) + 1) + min;
+    interface ParticleSystemCreator {
+        ParticleSystem create(Resources resources);
+    }
+
+    static class PListCreator implements ParticleSystemCreator {
+        final String plistPath;
+        ParticleSystem particleSystem;
+
+        public PListCreator(String plistPath) {
+            this.plistPath = plistPath;
+        }
+
+        @Override
+        public String toString() {
+            return plistPath;
+        }
+
+        @Override
+        public ParticleSystem create(Resources resources) {
+            if (null == particleSystem) {
+                particleSystem = PListParticleSystemHelper.create(resources, plistPath);
+            }
+            return particleSystem;
+        }
     }
 }

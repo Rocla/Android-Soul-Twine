@@ -61,7 +61,7 @@ public class DrawableParticle extends Particle {
                 paint.setXfermode(parent.mXfermode);
             }
 
-            int s = (int)size;
+            int s = (int) size;
             drawable.setBounds(0, 0, s, s);
             float pivot = (s >> 1);
 

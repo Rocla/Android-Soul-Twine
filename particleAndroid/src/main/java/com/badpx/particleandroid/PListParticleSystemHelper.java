@@ -9,7 +9,12 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Base64;
-import com.badpx.particleandroid.utils.*;
+
+import com.badpx.particleandroid.utils.BlendUtils;
+import com.badpx.particleandroid.utils.Colour;
+import com.badpx.particleandroid.utils.Misc;
+import com.badpx.particleandroid.utils.PListParser;
+import com.badpx.particleandroid.utils.Point;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,7 +40,7 @@ public class PListParticleSystemHelper {
         if (null != plistStream) {
             PListParser parser = new PListParser(plistStream);
             if (parser.isValidPList && parser.root instanceof Map) {
-                Map kv = (Map)parser.root;
+                Map kv = (Map) parser.root;
                 ParticleSystem particleSystem = null;
 
                 Object v = kv.get("maxParticles");
@@ -51,10 +56,10 @@ public class PListParticleSystemHelper {
                 Object x = kv.get("sourcePositionx");
                 Object y = kv.get("sourcePositiony");
                 if (x instanceof Float && y instanceof Float) {
-                    particleSystem.setPosition((Float)x, (Float)y);
+                    particleSystem.setPosition((Float) x, (Float) y);
                 }
                 if (particleSystem.getEmitterMode() == ParticleSystem.EmitterMode.MODE_GRAVITY) {
-                    v =  kv.get("radialAcceleration");
+                    v = kv.get("radialAcceleration");
                     if (v instanceof Float) {
                         particleSystem.setRadialAccel((Float) v);
                     }
@@ -65,7 +70,7 @@ public class PListParticleSystemHelper {
                     x = kv.get("gravityx");
                     y = kv.get("gravityy");
                     if (x instanceof Float && y instanceof Float) {
-                        particleSystem.setGravity(new Point((Float)x, (Float)y));
+                        particleSystem.setGravity(new Point((Float) x, (Float) y));
                     }
                     v = kv.get("speedVariance");
                     if (v instanceof Float) {
@@ -125,12 +130,12 @@ public class PListParticleSystemHelper {
                 int blendFuncSource = -1;
                 v = kv.get("blendFuncSource");
                 if (v instanceof Integer) {
-                    blendFuncSource = (Integer)v;
+                    blendFuncSource = (Integer) v;
                 }
                 int blendFuncDest = -1;
                 v = kv.get("blendFuncDestination");
                 if (v instanceof Integer) {
-                    blendFuncDest = (Integer)v;
+                    blendFuncDest = (Integer) v;
                 }
                 if (blendFuncSource > -1 && blendFuncDest > -1) {
                     PorterDuff.Mode mode =
@@ -196,7 +201,7 @@ public class PListParticleSystemHelper {
                 b = kv.get("finishColorVarianceBlue");
                 if (a instanceof Float && r instanceof Float &&
                         g instanceof Float && b instanceof Float) {
-                    particleSystem.setEndColorVar(Colour.argb((Float)a, (Float)r, (Float)g, (Float)b));
+                    particleSystem.setEndColorVar(Colour.argb((Float) a, (Float) r, (Float) g, (Float) b));
                 }
 
                 // emits per frame
@@ -206,13 +211,14 @@ public class PListParticleSystemHelper {
                 boolean isTextureSetup = false;
                 v = kv.get("textureFileName");
                 if (v instanceof String && null != resources) {
-                    String fileName = (String)v;
+                    String fileName = (String) v;
                     try {
                         final Bitmap texture =
                                 BitmapFactory.decodeStream(resources.getAssets().open(fileName));
                         if (null != texture) {
                             particleSystem.setParticleFactory(new ParticleSystem.ParticleFactory() {
                                 private Drawable mCommonDrawable;
+
                                 @Override
                                 public Particle create(ParticleSystem particleSystem) {
                                     if (null == mCommonDrawable) {

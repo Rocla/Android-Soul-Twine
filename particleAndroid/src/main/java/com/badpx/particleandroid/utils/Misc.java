@@ -24,24 +24,22 @@ import java.util.zip.GZIPInputStream;
  * Date: 14/11/6
  */
 public class Misc {
-    public static float clamp(float value, float min_inclusive, float max_inclusive)
-    {
+    public static float clamp(float value, float min_inclusive, float max_inclusive) {
         if (min_inclusive > max_inclusive) {
             float t = min_inclusive;
             min_inclusive = max_inclusive;
             max_inclusive = t;
         }
-        return value < min_inclusive ? min_inclusive : value < max_inclusive? value : max_inclusive;
+        return value < min_inclusive ? min_inclusive : value < max_inclusive ? value : max_inclusive;
     }
 
-    public static int clamp(int value, int min_inclusive, int max_inclusive)
-    {
+    public static int clamp(int value, int min_inclusive, int max_inclusive) {
         if (min_inclusive > max_inclusive) {
             int t = min_inclusive;
             min_inclusive = max_inclusive;
             max_inclusive = t;
         }
-        return value < min_inclusive ? min_inclusive : value < max_inclusive? value : max_inclusive;
+        return value < min_inclusive ? min_inclusive : value < max_inclusive ? value : max_inclusive;
     }
 
     // Unzip gzip buffer

@@ -1,20 +1,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/txtMovementSequence"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
         android:padding="@dimen/padding_medium"
         android:text="@string/txtMovement"
         android:textColor="#000080"
         android:textSize="20dp"
         android:typeface="monospace"
-        tools:context=".MainActivity"
-        android:layout_marginTop="60dp" />
+        tools:context=".MainActivity" />
 
     <Button
         android:id="@+id/btnStand"
@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/btnStand"
         android:layout_alignBottom="@+id/btnStand"
-        android:layout_alignLeft="@+id/btnBackward"        
+        android:layout_alignLeft="@+id/btnBackward"
         android:layout_alignParentRight="true"
         android:onClick="sitPressed"
         android:text="@string/txtSit" />
@@ -81,8 +81,8 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/txtBattery"
+        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true" />
+        android:text="@string/txtBattery" />
 
 </RelativeLayout>

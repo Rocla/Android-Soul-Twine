@@ -13,7 +13,9 @@
  */
 package com.badpx.particleandroid;
 
-import android.graphics.*;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuffColorFilter;
 
 /**
  * Created with IntelliJ IDEA.

@@ -35,6 +35,34 @@ public class Point {
         this.y = y;
     }
 
+    public static Point mult(Point p, float s) {
+        return new Point(p.x * s, p.y * s);
+    }
+
+    public static Point add(Point p1, Point p2) {
+        return new Point(p1.x + p2.x, p1.y + p2.y);
+    }
+
+    public static Point sub(Point p1, Point p2) {
+        return new Point(p1.x - p2.x, p1.y - p2.y);
+    }
+
+    public static Point Normalize(Point p) {
+        return mult(p, 1.0f / length(p));
+    }
+
+    public static float length(Point p) {
+        return (float) Math.sqrt(lengthSQ(p));
+    }
+
+    private static float lengthSQ(Point p) {
+        return dot(p, p);
+    }
+
+    public static float dot(Point p1, Point p2) {
+        return p1.x * p2.x + p1.y * p2.y;
+    }
+
     public Point multBy(float s) {
         x *= s;
         y *= s;
@@ -65,34 +93,5 @@ public class Point {
     public void set(Point pos) {
         x = pos.x;
         y = pos.y;
-    }
-
-    public static Point mult(Point p, float s) {
-        return new Point(p.x * s, p.y * s);
-    }
-
-    public static Point add(Point p1, Point p2) {
-        return new Point(p1.x + p2.x, p1.y + p2.y);
-    }
-
-    public static Point sub(Point p1, Point p2) {
-        return new Point(p1.x - p2.x, p1.y - p2.y);
-    }
-
-    public static Point Normalize(Point p) {
-        return mult(p, 1.0f / length(p));
-    }
-
-    public static float length(Point p) {
-        return (float) Math.sqrt(lengthSQ(p));
-    }
-
-    private static float lengthSQ(Point p) {
-        return dot(p, p);
-    }
-
-    public static float dot(Point p1, Point p2)
-    {
-        return p1.x * p2.x + p1.y * p2.y;
     }
 }

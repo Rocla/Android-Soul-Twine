@@ -21,21 +21,22 @@ public class BlendUtils {
      * GL_ONE_MINUS_DST_ALPHA   (1, 1, 1) - (Ad, Ad, Ad)    1 - Ad
      * GL_CONSTANT_ALPHA        (Ac, Ac, Ac)                Ac
      * GL_SRC_ALPHA_SATURATE    (f, f, f);f=min(As, 1 - Ad) 1
-     * */
-    public static final int GL_ZERO                = 0;
-    public static final int GL_ONE                 = 1;
-    public static final int GL_SRC_COLOR           = 0x0300;
+     */
+    public static final int GL_ZERO = 0;
+    public static final int GL_ONE = 1;
+    public static final int GL_SRC_COLOR = 0x0300;
     public static final int GL_ONE_MINUS_SRC_COLOR = 0x0301;
-    public static final int GL_SRC_ALPHA           = 0x0302;
+    public static final int GL_SRC_ALPHA = 0x0302;
     public static final int GL_ONE_MINUS_SRC_ALPHA = 0x0303;
-    public static final int GL_DST_ALPHA           = 0x0304;
+    public static final int GL_DST_ALPHA = 0x0304;
     public static final int GL_ONE_MINUS_DST_ALPHA = 0x0305;
-    public static final int GL_DST_COLOR           = 0x0306;
+    public static final int GL_DST_COLOR = 0x0306;
     public static final int GL_ONE_MINUS_DST_COLOR = 0x0307;
-    public static final int GL_SRC_ALPHA_SATURATE  = 0x0308;
+    public static final int GL_SRC_ALPHA_SATURATE = 0x0308;
 
     public static final SparseArray<PorterDuff.Mode> BLEND_MODE_TO_PORTER_DUFF =
             new SparseArray<PorterDuff.Mode>();
+
     static {
         // Reference source: aosp/frameworks/base/libs/hwui/OpenGLRenderer.cpp
 

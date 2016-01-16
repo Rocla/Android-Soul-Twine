@@ -15,48 +15,48 @@
         android:id="@+id/imgRobot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/icon_soultwine"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignBottom="@+id/txtTitle"
-        android:layout_toStartOf="@+id/txtTitle" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/txtTitle"
+        android:src="@drawable/icon_soultwine" />
 
     <TextView
         android:id="@+id/txtTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:padding="@dimen/padding_medium"
         android:text="@string/txtFlyOut"
         android:textColor="#5f5f94"
         android:textSize="20dp"
         android:typeface="monospace"
-        tools:context=".MainActivity"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        tools:context=".MainActivity" />
 
     <TextView
         android:id="@+id/txtMovementSequence"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/txtTitle"
+        android:layout_centerHorizontal="true"
         android:padding="@dimen/padding_medium"
         android:text="@string/txtMovement"
         android:textColor="#ffffff"
         android:textSize="20dp"
         android:typeface="monospace"
-        tools:context=".MainActivity"
-        android:layout_below="@+id/txtTitle"
-        android:layout_centerHorizontal="true" />
+        tools:context=".MainActivity" />
 
     <Button
         android:id="@+id/btnStand"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="standPressed"
-        android:text="@string/txtStand"
-        android:layout_below="@+id/txtMovementSequence"
+        android:layout_alignEnd="@+id/btnForward"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/txtMovementSequence"
         android:layout_toStartOf="@+id/imageView"
-        android:layout_alignEnd="@+id/btnForward" />
+        android:onClick="standPressed"
+        android:text="@string/txtStand" />
 
     <Button
         android:id="@+id/btnSit"
@@ -64,7 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/btnStand"
         android:layout_alignBottom="@+id/btnStand"
-        android:layout_alignLeft="@+id/btnBackward"        
+        android:layout_alignLeft="@+id/btnBackward"
         android:layout_alignParentRight="true"
         android:onClick="sitPressed"
         android:text="@string/txtSit" />
@@ -109,75 +109,75 @@
         android:text="@string/txtRight" />
 
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        android:src="@drawable/icon_soultwine"
         android:layout_below="@+id/txtMovementSequence"
         android:layout_centerHorizontal="true"
         android:paddingLeft="-20dp"
-        android:paddingTop="20dp" />
+        android:paddingTop="20dp"
+        android:src="@drawable/icon_soultwine" />
 
 
     <ToggleButton
+        android:id="@+id/toggleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Accelero Move"
-        android:id="@+id/toggleButton"
-        android:checked="false"
-        android:textColor="#000000"
+        android:layout_alignEnd="@+id/txtMovementSequence"
         android:layout_below="@+id/btnRight"
-        android:layout_alignEnd="@+id/txtMovementSequence" />
+        android:checked="false"
+        android:text="Accelero Move"
+        android:textColor="#000000" />
 
     <TextView
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/txtNAOAcceleroMove"
-        android:id="@+id/textView2"
-        android:layout_below="@+id/toggleButton"
         android:layout_alignEnd="@+id/toggleButton"
-        android:textColor="#ffffff"
-        android:layout_marginRight="-18dp" />
+        android:layout_below="@+id/toggleButton"
+        android:layout_marginRight="-18dp"
+        android:text="@string/txtNAOAcceleroMove"
+        android:textColor="#ffffff" />
 
     <EditText
         android:id="@+id/etSequences"
         android:layout_width="wrap_content"
         android:layout_height="100dp"
-        android:ems="7"
-        android:inputType="textNoSuggestions"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="129dp"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_marginBottom="129dp"
+        android:ems="7"
+        android:inputType="textNoSuggestions" />
 
     <Button
         android:id="@+id/btnRun"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="63dp"
         android:onClick="runSequencePressed"
-        android:text="@string/txtNAORunSequences"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:text="@string/txtNAORunSequences" />
 
     <ToggleButton
+        android:id="@+id/toggleButton2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Accelero Move"
-        android:id="@+id/toggleButton2"
-        android:checked="false"
-        android:textColor="#000000"
         android:layout_above="@+id/textView2"
-        android:layout_alignStart="@+id/txtMovementSequence" />
+        android:layout_alignStart="@+id/txtMovementSequence"
+        android:checked="false"
+        android:text="Accelero Move"
+        android:textColor="#000000" />
 
     <TextView
+        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/txtNAOSaveSequences"
-        android:id="@+id/textView3"
-        android:textColor="#ffffff"
-        android:layout_alignTop="@+id/textView2"
         android:layout_alignStart="@+id/toggleButton2"
-        android:layout_marginLeft="-7dp" />
+        android:layout_alignTop="@+id/textView2"
+        android:layout_marginLeft="-7dp"
+        android:text="@string/txtNAOSaveSequences"
+        android:textColor="#ffffff" />
 
 </RelativeLayout>

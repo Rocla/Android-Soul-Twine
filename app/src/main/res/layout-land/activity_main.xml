@@ -1,29 +1,29 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/txtTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
         android:padding="@dimen/padding_medium"
         android:text="@string/txtFlyOut"
         android:textColor="#000080"
         android:textSize="20dp"
         android:typeface="monospace"
-        tools:context=".MainActivity"
-        android:layout_marginTop="60dp" />
+        tools:context=".MainActivity" />
 
     <EditText
         android:id="@+id/txtIPAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/hintIP"
+        android:layout_alignLeft="@+id/txtTitle"
         android:layout_below="@+id/txtTitle"
-        android:layout_alignLeft="@+id/txtTitle" />
+        android:ems="10"
+        android:hint="@string/hintIP" />
 
     <Button
         android:id="@+id/btnConnect"

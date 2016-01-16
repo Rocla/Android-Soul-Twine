@@ -14,6 +14,7 @@
 package com.badpx.particleandroid;
 
 import android.graphics.Canvas;
+
 import com.badpx.particleandroid.utils.Colour;
 import com.badpx.particleandroid.utils.Point;
 
@@ -25,50 +26,22 @@ import com.badpx.particleandroid.utils.Point;
 public abstract class Particle {
     protected ParticleSystem parent;
 
-    protected Point     pos;
-    protected Point     startPos;
+    protected Point pos;
+    protected Point startPos;
 
-    protected int    color;
+    protected int color;
     protected Colour deltaColor;
 
-    protected float        size;
-    protected float        deltaSize;
+    protected float size;
+    protected float deltaSize;
 
-    protected float        rotation;
-    protected float        deltaRotation;
+    protected float rotation;
+    protected float deltaRotation;
 
-    protected float        timeToLive;
+    protected float timeToLive;
 
     ModeA modeA;
     ModeB modeB;
-
-    //! Mode A: gravity, direction, radial accel, tangential accel
-    class ModeA {
-        Point dir = new Point();
-        float        radialAccel;
-        float        tangentialAccel;
-
-        void copy(ModeA ohs) {
-            dir.set(ohs.dir);
-            radialAccel = ohs.radialAccel;
-            tangentialAccel = ohs.tangentialAccel;
-        }
-    }
-
-    //! Mode B: radius mode
-    class ModeB {
-        float        angle;
-        float        degreesPerSecond;
-        float        radius;
-        float        deltaRadius;
-
-        void copy(ModeB ohs) {
-            angle = ohs.angle;
-            degreesPerSecond = ohs.degreesPerSecond;
-            radius = ohs.radius;
-            deltaRadius = ohs.deltaRadius;
-        }
-    }
 
     public Particle(ParticleSystem particleSystem) {
         parent = particleSystem;
@@ -97,4 +70,32 @@ public abstract class Particle {
     }
 
     public abstract void draw(Canvas canvas);
+
+    //! Mode A: gravity, direction, radial accel, tangential accel
+    class ModeA {
+        Point dir = new Point();
+        float radialAccel;
+        float tangentialAccel;
+
+        void copy(ModeA ohs) {
+            dir.set(ohs.dir);
+            radialAccel = ohs.radialAccel;
+            tangentialAccel = ohs.tangentialAccel;
+        }
+    }
+
+    //! Mode B: radius mode
+    class ModeB {
+        float angle;
+        float degreesPerSecond;
+        float radius;
+        float deltaRadius;
+
+        void copy(ModeB ohs) {
+            angle = ohs.angle;
+            degreesPerSecond = ohs.degreesPerSecond;
+            radius = ohs.radius;
+            deltaRadius = ohs.deltaRadius;
+        }
+    }
 }

@@ -16,14 +16,21 @@
     <string name="txtMovement">Give an order</string>
     <string name="txtMovementAuto">Create Movement Sequence</string>
     <string name="txtName">Name:</string>
-    <string name="txtStandAuto">Stand</string><string name="txtStand">Stand</string>
-    <string name="txtSitAuto">Sit Down</string><string name="txtSit">Sit Down</string>
+    <string name="txtStandAuto">Stand</string>
+    <string name="txtStand">Stand</string>
+    <string name="txtSitAuto">Sit Down</string>
+    <string name="txtSit">Sit Down</string>
     <string name="txtSave">Save Sequence</string>
-    <string name="txtForwardAuto">Walk Forward</string><string name="txtForward">Walk Forward</string>
-    <string name="txtBackwardAuto">Walk Backward</string><string name="txtBackward">Walk Backward</string>
-    <string name="txtLeftAuto">Turn Left</string><string name="txtLeft">Turn Left</string>
-    <string name="txtRightAuto">Turn Right</string><string name="txtRight">Turn Right</string>
-    <string name="txtObject">Object Interaction</string><string name="heading_string">Sequence Name       -     Sequence Type</string>
+    <string name="txtForwardAuto">Walk Forward</string>
+    <string name="txtForward">Walk Forward</string>
+    <string name="txtBackwardAuto">Walk Backward</string>
+    <string name="txtBackward">Walk Backward</string>
+    <string name="txtLeftAuto">Turn Left</string>
+    <string name="txtLeft">Turn Left</string>
+    <string name="txtRightAuto">Turn Right</string>
+    <string name="txtRight">Turn Right</string>
+    <string name="txtObject">Object Interaction</string>
+    <string name="heading_string">Sequence Name       -     Sequence Type</string>
     <string name="txtManualSequences">Manual</string>
     <string name="txtAutoSequences">Auto </string>
     <string name="txtNAOSequences">Control</string>
