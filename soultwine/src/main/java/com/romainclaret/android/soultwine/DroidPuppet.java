@@ -10,6 +10,7 @@ import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class DroidPuppet {
 
@@ -23,8 +24,8 @@ public class DroidPuppet {
         ipAddress = ip;
     }
 
-    public static void Sit(Context c) {
-        try {
+    public static void Sit(Context c){
+        try{
             Socket clientSocket;
             clientSocket = new Socket(ipAddress, 9559);
             //Get DataOutput Stream to write to server
@@ -32,15 +33,39 @@ public class DroidPuppet {
             //Get input stream to read from server
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-            ObjectInputStream in = new ObjectInputStream(c.getAssets().open("Sit.data"));
+
+            ObjectInputStream in = new ObjectInputStream(c.getAssets().open("sit.dat"));
             ArrayList<byte[]> FinalMessageByteArray = (ArrayList<byte[]>) in.readObject();
 
             //Write to server
-            for (int i = 0; i < 27; i++) {
-                //Send my Byte array to DroidPuppet
+            //String robotMessage;
+            for(int i = 0; i < 27 ; i++){
+
+                //Send my Byte array to Robot
                 outToServer.write(FinalMessageByteArray.get(i));
                 outToServer.flush();
+                if(i == 0)
+                {
+                    char[] robotMessage1 = new char[807];
+                    inFromServer.read(robotMessage1, 0, 807);
+                    System.out.println("One: " + Arrays.toString(robotMessage1));
+                }
+                if (i == 1)
+                {
+                    char[] robotMessage2 = new char[763];
+                    inFromServer.read(robotMessage2, 0, 763 );
+                    System.out.println("two: " + Arrays.toString(robotMessage2));
+                }
+                if (i == 26)
+                {
+                    char[] robotMessage3 = new char[763];
+                    inFromServer.read(robotMessage3, 0, 763);
+                    System.out.println("three:" + Arrays.toString(robotMessage3));
+                }
+
+
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (IllegalArgumentException e) {
@@ -52,25 +77,53 @@ public class DroidPuppet {
         }
     }
 
-    public static void Stand(Context c) {
-        try {
+    public static void Stand(Context c){
+        try{
             Socket clientSocket;
-            clientSocket = new Socket(DroidPuppet.getName(), 9559);
+            clientSocket = new Socket(ipAddress, 9559);
             //Get DataOutput Stream to write to server
             DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
             //Get input stream to read from server
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-            ObjectInputStream in = new ObjectInputStream(c.getAssets().open("Stand.data"));
+            ObjectInputStream in = new ObjectInputStream(c.getAssets().open("stand.dat"));
             ArrayList<byte[]> FinalMessageByteArray = (ArrayList<byte[]>) in.readObject();
 
             //Write to server
-            for (int i = 0; i < 38; i++) {
+            //String robotMessage;
+            for(int i = 0; i < 38 ; i++){
 
-                //Send my Byte array to DroidPuppet
+                //Send my Byte array to Robot
                 outToServer.write(FinalMessageByteArray.get(i));
                 outToServer.flush();
+                if(i == 0)
+                {
+                    char[] robotMessage1 = new char[806];
+                    inFromServer.read(robotMessage1, 0, 806);
+                    System.out.println("One: " + Arrays.toString(robotMessage1));
+                }
+                if (i == 1)
+                {
+                    char[] robotMessage2 = new char[763];
+                    inFromServer.read(robotMessage2, 0, 763 );
+                    System.out.println("two: " + Arrays.toString(robotMessage2));
+                }
+                if (i == 30)
+                {
+                    char[] robotMessage3 = new char[763];
+                    inFromServer.read(robotMessage3, 0, 763);
+                    System.out.println("three:" + Arrays.toString(robotMessage3));
+                }
+                if (i == 37)
+                {
+                    char[] robotMessage3 = new char[763];
+                    inFromServer.read(robotMessage3, 0, 763);
+                    System.out.println("three:" + Arrays.toString(robotMessage3));
+                }
+
+
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (IllegalArgumentException e) {
@@ -83,7 +136,9 @@ public class DroidPuppet {
     }
 
 
-    public static void Forward() {
+    public static void Forward()
+    {
+
         try {
             Socket clientSocket;
             clientSocket = new Socket(ipAddress, 9559);
@@ -94,7 +149,7 @@ public class DroidPuppet {
             //Get input stream to read from server
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-            //Package to make DroidPuppet Go Forward
+            //Package to make Robot Walk Forward
             byte walkForward[] = {
                     0x50, 0x4f, 0x53, 0x54, 0x20, 0x2f, 0x20, 0x48,
                     0x54, 0x54, 0x50, 0x2f, 0x31, 0x2e, 0x31, 0x0d,
@@ -206,11 +261,15 @@ public class DroidPuppet {
                     0x42, 0x6f, 0x64, 0x79, 0x3e, 0x3c, 0x2f, 0x53,
                     0x4f, 0x41, 0x50, 0x2d, 0x45, 0x4e, 0x56, 0x3a,
                     0x45, 0x6e, 0x76, 0x65, 0x6c, 0x6f, 0x70, 0x65,
-                    0x3e};
+                    0x3e };
 
             //Write to server
             outToServer.write(walkForward);
             outToServer.flush();
+
+            //read from server
+            String modifiedSentence = inFromServer.readLine();
+            System.out.println(modifiedSentence);
 
         } catch (UnknownHostException e) {
             e.printStackTrace();
@@ -219,7 +278,9 @@ public class DroidPuppet {
         }
     }
 
-    public static void Backward() {
+    public static void Backward()
+    {
+
         try {
             Socket clientSocket;
             clientSocket = new Socket(ipAddress, 9559);
@@ -230,7 +291,7 @@ public class DroidPuppet {
             //Get input stream to read from server
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-            //Package to make DroidPuppet Go Backward
+            //Package to make Robot Walk Backward
             byte walkBackward[] = {
                     0x50, 0x4f, 0x53, 0x54, 0x20, 0x2f, 0x20, 0x48,
                     0x54, 0x54, 0x50, 0x2f, 0x31, 0x2e, 0x31, 0x0d,
@@ -342,11 +403,15 @@ public class DroidPuppet {
                     0x3a, 0x42, 0x6f, 0x64, 0x79, 0x3e, 0x3c, 0x2f,
                     0x53, 0x4f, 0x41, 0x50, 0x2d, 0x45, 0x4e, 0x56,
                     0x3a, 0x45, 0x6e, 0x76, 0x65, 0x6c, 0x6f, 0x70,
-                    0x65, 0x3e, 0x00, 0x00, 0x00};
+                    0x65, 0x3e, 0x00, 0x00, 0x00 };
 
             //Write to server
             outToServer.write(walkBackward);
             outToServer.flush();
+
+            //read from server
+            String modifiedSentence = inFromServer.readLine();
+            System.out.println(modifiedSentence);
 
         } catch (UnknownHostException e) {
             e.printStackTrace();
@@ -356,7 +421,8 @@ public class DroidPuppet {
 
     }
 
-    public static void RotateLeft() {
+    public static void RotateLeft()
+    {
         try {
             Socket clientSocket;
             clientSocket = new Socket(ipAddress, 9559);
@@ -367,7 +433,8 @@ public class DroidPuppet {
             //Get input stream to read from server
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-            //Package to make DroidPuppet Turn Left
+            //Package to make Robot Walk Forward
+
             byte turnLeft[] = {
                     0x50, 0x4f, 0x53, 0x54, 0x20, 0x2f, 0x20, 0x48,
                     0x54, 0x54, 0x50, 0x2f, 0x31, 0x2e, 0x31, 0x0d,
@@ -479,7 +546,7 @@ public class DroidPuppet {
                     0x56, 0x3a, 0x42, 0x6f, 0x64, 0x79, 0x3e, 0x3c,
                     0x2f, 0x53, 0x4f, 0x41, 0x50, 0x2d, 0x45, 0x4e,
                     0x56, 0x3a, 0x45, 0x6e, 0x76, 0x65, 0x6c, 0x6f,
-                    0x70, 0x65, 0x3e, 0x00, 0x00};
+                    0x70, 0x65, 0x3e, 0x00, 0x00 };
 
             //Write to server
             outToServer.write(turnLeft);
@@ -487,6 +554,7 @@ public class DroidPuppet {
 
             //read from server
             String modifiedSentence = inFromServer.readLine();
+            System.out.println(modifiedSentence);
 
         } catch (UnknownHostException e) {
             e.printStackTrace();
@@ -495,7 +563,8 @@ public class DroidPuppet {
         }
     }
 
-    public static void RotateRight() {
+    public static void RotateRight()
+    {
         try {
             Socket clientSocket;
             clientSocket = new Socket(ipAddress, 9559);
@@ -506,7 +575,8 @@ public class DroidPuppet {
             //Get input stream to read from server
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-            //Package to make DroidPuppet Turn Right
+            //Package to make Robot Walk Forward
+
             byte turnRight[] = {
                     0x50, 0x4f, 0x53, 0x54, 0x20, 0x2f, 0x20, 0x48,
                     0x54, 0x54, 0x50, 0x2f, 0x31, 0x2e, 0x31, 0x0d,
@@ -618,11 +688,15 @@ public class DroidPuppet {
                     0x4e, 0x56, 0x3a, 0x42, 0x6f, 0x64, 0x79, 0x3e,
                     0x3c, 0x2f, 0x53, 0x4f, 0x41, 0x50, 0x2d, 0x45,
                     0x4e, 0x56, 0x3a, 0x45, 0x6e, 0x76, 0x65, 0x6c,
-                    0x6f, 0x70, 0x65, 0x3e, 0x00};
+                    0x6f, 0x70, 0x65, 0x3e, 0x00 };
 
             //Write to server
             outToServer.write(turnRight);
             outToServer.flush();
+
+            //read from server
+            String modifiedSentence = inFromServer.readLine();
+            System.out.println(modifiedSentence);
 
         } catch (UnknownHostException e) {
             e.printStackTrace();
